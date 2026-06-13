@@ -3,25 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frações e Suas Representações</title>
+    <title>Desafio de Frações - Estilo OBMEP</title>
     <style>
         :root {
-            --primary: #4a90e2;
-            --secondary: #f39c12;
-            --danger: #e74c3c;
-            --success: #2ecc71;
-            --background: #f5f7fa;
-            --text: #333;
-        }
-
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f0fdf4;
+            --text-color: #1f2937;
+            --card-bg: #ffffff;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --gold: #fbbf24;
         }
 
         body {
-            background-color: var(--background);
-            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
             padding: 20px;
             display: flex;
@@ -31,460 +29,375 @@
         }
 
         .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background-color: var(--card-bg);
             padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 700px;
             width: 100%;
-            max-width: 600px;
             text-align: center;
+            position: relative;
         }
 
         h1 {
             color: var(--primary);
-            font-size: 1.5rem;
             margin-bottom: 20px;
         }
 
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            background: #eee;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .error-count {
-            color: var(--danger);
-        }
-
-        .step {
+        /* Telas */
+        #start-screen, #game-screen, #result-screen {
             display: none;
-            animation: fadeIn 0.5s;
         }
-
-        .step.active {
+        #start-screen.active, #game-screen.active, #result-screen.active {
             display: block;
         }
 
-        input[type="number"], input[type="text"] {
-            padding: 10px;
-            width: 80px;
+        /* Inputs e Botões */
+        input[type="text"] {
+            width: 80%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            margin-bottom: 20px;
             text-align: center;
-            font-size: 1.2rem;
-            border: 2px solid #ccc;
-            border-radius: 6px;
-            margin: 5px;
-        }
-
-        .fraction-input {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            margin: 20px 0;
-        }
-
-        .fraction-line {
-            width: 80px;
-            height: 3px;
-            background-color: var(--text);
         }
 
         button {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 12px 20px;
-            font-size: 1rem;
-            border-radius: 6px;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 8px;
             cursor: pointer;
-            margin: 10px 5px;
             transition: background 0.3s;
-            width: 100%;
-            max-width: 250px;
+            margin: 5px;
+            font-weight: bold;
         }
 
         button:hover {
-            background-color: #357abd;
+            background-color: var(--primary-hover);
         }
 
         .btn-secondary {
-            background-color: var(--secondary);
+            background-color: #64748b;
         }
-        
         .btn-secondary:hover {
-            background-color: #d68910;
+            background-color: #475569;
+        }
+
+        /* Cabeçalho do Jogo */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            background: #e0f2fe;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Questões */
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            text-align: justify;
         }
 
         .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .link-explicacao {
-            display: inline-block;
-            margin-top: 15px;
-            color: var(--primary);
-            text-decoration: underline;
-            cursor: pointer;
-            font-size: 0.9rem;
+        .option-btn {
+            background-color: #f1f5f9;
+            color: var(--text-color);
+            border: 2px solid #cbd5e1;
+            text-align: left;
+            padding: 15px;
+            font-size: 16px;
         }
 
-        .number-line {
-            width: 100%;
-            height: 60px;
-            background: repeating-linear-gradient(90deg, transparent, transparent 49px, #333 49px, #333 51px), linear-gradient(0deg, transparent 28px, #333 28px, #333 32px, transparent 32px);
-            margin: 30px 0;
+        .option-btn:hover {
+            background-color: #e2e8f0;
+            border-color: var(--primary);
+        }
+
+        .option-btn.correct { background-color: var(--success); color: white; border-color: var(--success); }
+        .option-btn.wrong { background-color: var(--danger); color: white; border-color: var(--danger); }
+
+        /* Modal Pais/Professores */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            text-align: left;
             position: relative;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .close-modal {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
         }
 
-        @media (max-width: 480px) {
-            .options-grid {
-                grid-template-columns: 1fr;
-            }
+        /* Certificado / Imagem de Compartilhamento */
+        .certificate {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef08a 100%);
+            border: 8px solid var(--gold);
+            padding: 40px 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            position: relative;
+        }
+        .certificate h2 { color: #854d0e; font-size: 28px; margin-bottom: 5px; }
+        .certificate p { font-size: 18px; color: #713f12; margin: 10px 0; }
+        .student-name-cert { font-size: 32px; font-weight: bold; color: var(--primary); text-transform: uppercase; margin: 20px 0; }
+        .medallion {
+            width: 80px; height: 80px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 40px; margin: 0 auto 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            .certificate, .certificate * { visibility: visible; }
+            .certificate { position: absolute; left: 0; top: 0; width: 100%; box-sizing: border-box; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Frações e Suas Representações</h1>
-    
-    <div class="status-bar">
-        <span>Fase: <span id="current-phase">1</span>/6</span>
-        <span class="error-count">Erros: <span id="error-count">0</span>/5</span>
+    <!-- TELA INICIAL -->
+    <div class="container active" id="start-screen">
+        <h1>🏆 Olimpíada de Frações</h1>
+        <p>Prepare-se para o desafio! Responda às 20 questões usando a lógica e o seu conhecimento matemático.</p>
+        <br>
+        <input type="text" id="student-name" placeholder="Digite seu Nome Completo para começar" autocomplete="off">
+        <br>
+        <button onclick="iniciarJogo()">Começar o Desafio</button>
+        <br><br>
+        <button class="btn-secondary" style="font-size: 14px;" onclick="abrirModal()">Para Pais e Professores 📚</button>
     </div>
 
-    <!-- Etapa 1: Definir a Fração -->
-    <div id="step-1" class="step active">
-        <h3>1. Escolha sua fração</h3>
-        <p>Digite uma fração ou gere uma aleatória.</p>
-        <div class="fraction-input">
-            <input type="number" id="num-1" placeholder="Num">
-            <div class="fraction-line"></div>
-            <input type="number" id="den-1" placeholder="Den">
+    <!-- TELA DO JOGO -->
+    <div class="container" id="game-screen">
+        <div class="game-header">
+            <div>Questão: <span id="q-number">1</span>/20</div>
+            <div>⏱️ Tempo: <span id="timer">00:00</span></div>
+            <div>Pontos: <span id="score">0</span></div>
         </div>
-        <button onclick="iniciarComFracaoUsuario()">Usar minha fração</button>
-        <button class="btn-secondary" onclick="gerarFracaoAleatoria()">Obter fração aleatória</button>
-    </div>
-
-    <!-- Etapa 2: Fração Equivalente (Múltipla Escolha) -->
-    <div id="step-2" class="step">
-        <h3>2. Qual fração abaixo é equivalente a <span class="frac-atual"></span>?</h3>
-        <div class="options-grid" id="options-step2">
+        
+        <div class="question-text" id="question-text">Carregando pergunta...</div>
+        
+        <div class="options-grid" id="options-container">
             <!-- Botões gerados via JS -->
         </div>
-        <div class="link-explicacao" onclick="alert('Fundamentação Teórica: Frações equivalentes representam a mesma quantidade. Multiplicando ou dividindo o numerador e o denominador pelo mesmo número, obtemos uma fração equivalente.')">Clique aqui para explicação</div>
     </div>
 
-    <!-- Etapa 3: Digitar Fração Equivalente -->
-    <div id="step-3" class="step">
-        <h3>3. Digite outra fração equivalente a <span class="frac-atual"></span></h3>
-        <p style="font-size: 0.9rem; color: #666;">(Atenção: não pode ser a fração original nem a escolhida na etapa anterior. Você tem 3 tentativas.)</p>
-        <p>Tentativas: <span id="tentativas-step3">0</span>/3</p>
-        <div class="fraction-input">
-            <input type="number" id="num-3" placeholder="Num">
-            <div class="fraction-line"></div>
-            <input type="number" id="den-3" placeholder="Den">
-        </div>
-        <button onclick="verificarEtapa3()">Verificar</button>
-    </div>
-
-    <!-- Etapa 4: Reta Numérica -->
-    <div id="step-4" class="step">
-        <h3>4. Onde a fração <span class="frac-atual"></span> está na reta numérica?</h3>
-        <p>Considere o intervalo de 0 a 1.</p>
-        <!-- Representação visual simples da reta -->
-        <div class="number-line"></div>
-        <div class="options-grid" id="options-step4">
-            <!-- Opções geradas via JS -->
-        </div>
-    </div>
-
-    <!-- Etapa 5: Fração de uma quantidade -->
-    <div id="step-5" class="step">
-        <h3>5. Calcule <span class="frac-atual"></span> de 1.000</h3>
-        <div class="options-grid" id="options-step5">
-            <!-- Opções geradas via JS -->
-        </div>
-        <div class="link-explicacao" onclick="alert('Explicação: Para calcular a fração de um número, divida o número pelo denominador e multiplique o resultado pelo numerador.')">Clique aqui para explicação</div>
-    </div>
-
-    <!-- Etapa 6: Problema OBMEP -->
-    <div id="step-6" class="step">
-        <h3>6. Desafio OBMEP (Nível 1)</h3>
-        <p id="obmep-problem" style="text-align: justify; padding: 10px; background: #eee; border-radius: 8px;"></p>
-        <input type="text" id="obmep-answer" placeholder="Sua resposta" style="width: 100%; margin-top: 15px;">
-        <button onclick="verificarEtapa6()">Enviar Resposta</button>
-    </div>
-
-    <!-- Tela Final -->
-    <div id="step-final" class="step">
-        <h3 style="color: var(--success);">Parabéns!</h3>
-        <p>Você concluiu todas as etapas e demonstrou um excelente domínio sobre frações!</p>
-        <button onclick="reiniciarJogo()">Jogar Novamente</button>
-    </div>
-
-</div>
-
-<script>
-    // Estado do Jogo
-    let state = {
-        num: 0,
-        den: 0,
-        errosTotais: 0,
-        fracoesUsadas: [], // Guarda as frações já digitadas para evitar repetição na etapa 3
-        tentativasEtapa3: 0,
-        respostaObmepAtual: ""
-    };
-
-    // Banco de problemas fictício (como pede o documento, 1 de 20. Aqui coloquei 3 como exemplo)
-    const problemasOBMEP = [
-        { pergunta: "João comeu 1/4 de uma pizza de 8 pedaços. Quantos pedaços ele comeu?", resposta: "2" },
-        { pergunta: "Maria tem 12 maçãs e deu 2/3 para sua amiga. Quantas maçãs Maria deu?", resposta: "8" },
-        { pergunta: "Uma caixa d'água de 1000 litros está preenchida até 3/5 da sua capacidade. Quantos litros há nela?", resposta: "600" }
-    ];
-
-    // Funções de Navegação e Controle
-    function mostrarEtapa(etapa) {
-        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-        document.getElementById(`step-${etapa}`).classList.add('active');
-        if(etapa <= 6) document.getElementById('current-phase').innerText = etapa;
-        atualizarTextosFração();
-    }
-
-    function registrarErro() {
-        state.errosTotais++;
-        document.getElementById('error-count').innerText = state.errosTotais;
-        if (state.errosTotais >= 5) {
-            alert("Você atingiu o limite de 5 erros. O jogo será reiniciado!");
-            reiniciarJogo();
-            return true;
-        }
-        return false;
-    }
-
-    function reiniciarJogo() {
-        state = { num: 0, den: 0, errosTotais: 0, fracoesUsadas: [], tentativasEtapa3: 0, respostaObmepAtual: "" };
-        document.getElementById('error-count').innerText = "0";
-        document.getElementById('tentativas-step3').innerText = "0";
-        document.getElementById('num-1').value = "";
-        document.getElementById('den-1').value = "";
-        document.getElementById('num-3').value = "";
-        document.getElementById('den-3').value = "";
-        document.getElementById('obmep-answer').value = "";
-        mostrarEtapa(1);
-    }
-
-    function atualizarTextosFração() {
-        const text = `${state.num}/${state.den}`;
-        document.querySelectorAll('.frac-atual').forEach(el => el.innerText = text);
-    }
-
-    // Utilidades Matemáticas
-    function simplificar(n, d) {
-        let a = n, b = d;
-        while (b) { let temp = b; b = a % b; a = temp; }
-        return { n: n/a, d: d/a };
-    }
-    
-    function saoEquivalentes(n1, d1, n2, d2) {
-        return (n1 * d2) === (n2 * d1);
-    }
-
-    // --- ETAPA 1 ---
-    function iniciarComFracaoUsuario() {
-        const n = parseInt(document.getElementById('num-1').value);
-        const d = parseInt(document.getElementById('den-1').value);
-        if (isNaN(n) || isNaN(d) || d === 0) {
-            alert("Por favor, digite uma fração válida (denominador não pode ser zero).");
-            return;
-        }
-        configurarJogo(n, d);
-    }
-
-    function gerarFracaoAleatoria() {
-        const d = Math.floor(Math.random() * 8) + 2; // Denominadores de 2 a 9
-        const n = Math.floor(Math.random() * (d - 1)) + 1; // Numeradores menores que o denominador
-        document.getElementById('num-1').value = n;
-        document.getElementById('den-1').value = d;
-        configurarJogo(n, d);
-    }
-
-    function configurarJogo(n, d) {
-        state.num = n;
-        state.den = d;
-        state.fracoesUsadas.push(`${n}/${d}`);
-        prepararEtapa2();
-        mostrarEtapa(2);
-    }
-
-    // --- ETAPA 2 ---
-    function prepararEtapa2() {
-        const container = document.getElementById('options-step2');
-        container.innerHTML = '';
+    <!-- TELA DE RESULTADO (CERTIFICADO) -->
+    <div class="container" id="result-screen">
+        <h1>Desafio Concluído! 🎉</h1>
+        <p>Tire um print (captura de tela) do seu certificado abaixo ou salve em PDF para compartilhar!</p>
         
-        // Gerar 1 certa e 3 erradas
-        let fator = Math.floor(Math.random() * 3) + 2;
-        let correta = { n: state.num * fator, d: state.den * fator, eq: true };
+        <div class="certificate" id="certificate-card">
+            <div class="medallion" id="medal-icon">🥇</div>
+            <h2>Menção Honrosa</h2>
+            <p>Concedida a:</p>
+            <div class="student-name-cert" id="cert-name">NOME DO ALUNO</div>
+            <p>Por concluir o Desafio Lógico de Frações (Nível 1).</p>
+            <hr style="border:1px solid #d97706; width: 80%; margin: 20px auto;">
+            <p><strong>Desempenho:</strong> <span id="cert-mention">Excelente</span></p>
+            <p><strong>Pontuação Final:</strong> <span id="cert-score">0</span> pts</p>
+            <p><strong>Tempo Total:</strong> <span id="cert-time">00:00</span></p>
+            <p><strong>Erros Cometidos:</strong> <span id="cert-mistakes">0</span></p>
+        </div>
+
+        <button onclick="window.print()">🖨️ Salvar como PDF / Imprimir</button>
+        <button class="btn-secondary" onclick="location.reload()">Jogar Novamente</button>
+    </div>
+
+    <!-- MODAL PAIS E PROFESSORES -->
+    <div class="modal" id="info-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="fecharModal()">&times;</span>
+            <h2 style="color: var(--primary);">Fundamentação Pedagógica</h2>
+            <p>Esta atividade foi desenvolvida com base nos princípios da <strong>Aprendizagem Ativa</strong> e da <strong>Gamificação Educacional</strong>. O estudante é colocado como protagonista na resolução de problemas.</p>
+            <p>O foco no estilo de questões da <strong>OBMEP (Nível 1)</strong> tem um propósito claro: transcender o cálculo mecânico. O objetivo é desenvolver o raciocínio lógico-matemático, a interpretação de texto e o pensamento crítico.</p>
+            <p>O sistema conta com um temporizador e pontuação dinâmica que treina o foco e a tomada de decisão rápida. Os erros fazem parte do processo construtivo; o sistema penaliza levemente os equívocos para incentivar a precisão, mas recompensa grandemente o esforço com um certificado de conquista, estimulando a motivação do estudante.</p>
+        </div>
+    </div>
+
+    <script>
+        // Banco de Questões Estilo OBMEP Nível 1
+        const bankOfQuestions = [
+            { q: "João comeu 1/4 de uma pizza e Maria comeu 2/8 da mesma pizza. O que podemos afirmar?", options: ["João comeu mais que Maria.", "Maria comeu mais que João.", "Eles comeram a mesma quantidade.", "Juntos comeram a pizza inteira."], answer: 2 },
+            { q: "Em uma turma de 30 alunos, 2/5 são meninas. Quantos meninos há nessa turma?", options: ["12", "18", "15", "20"], answer: 1 },
+            { q: "Uma barra de chocolate foi dividida em 12 pedaços iguais. Lucas comeu 1/3 da barra e seu irmão comeu 1/4 da barra. Quantos pedaços sobraram?", options: ["5", "6", "7", "4"], answer: 0 },
+            { q: "Qual das frações abaixo representa a maior quantidade?", options: ["1/2", "1/3", "1/4", "1/5"], answer: 0 },
+            { q: "Um tanque de água está com 3/4 de sua capacidade total. Se cabem 40 litros no tanque inteiro, quantos litros há nele agora?", options: ["10 litros", "20 litros", "30 litros", "40 litros"], answer: 2 },
+            { q: "O dobro da fração 1/4 é igual a:", options: ["1/8", "2/8 (ou 1/4)", "1/2", "2/2"], answer: 2 },
+            { q: "Ana leu 1/5 das páginas de um livro de 100 páginas em um dia. Quantas páginas faltam para ela terminar o livro?", options: ["20", "80", "50", "40"], answer: 1 },
+            { q: "Para fazer um bolo, usa-se 1/2 xícara de açúcar. Se eu quiser fazer 3 bolos iguais, quanto de açúcar precisarei?", options: ["1 xícara", "1 xícara e meia (3/2)", "2 xícaras", "Meia xícara"], answer: 1 },
+            { q: "Uma prova tem 40 questões. Pedro acertou 3/4 da prova. Quantas questões ele errou?", options: ["30", "15", "10", "20"], answer: 2 },
+            { q: "A soma de 1/3 com 1/3 é:", options: ["1/6", "2/6", "2/3", "2/9"], answer: 2 },
+            { q: "Se 1/4 de uma hora equivale a 15 minutos, a quantos minutos equivale 3/4 de hora?", options: ["30 minutos", "45 minutos", "50 minutos", "60 minutos"], answer: 1 },
+            { q: "Carlos gastou 1/3 da sua mesada e ainda lhe sobraram R$ 50,00. Qual era o valor total da mesada de Carlos?", options: ["R$ 75,00", "R$ 100,00", "R$ 150,00", "R$ 50,00"], answer: 0 },
+            { q: "A fração que simplificada é igual a 2/3 é:", options: ["4/9", "6/9", "8/15", "10/12"], answer: 1 },
+            { q: "O pátio da escola foi dividido em 8 partes iguais. 3 partes foram pintadas de azul e 2 partes de amarelo. Qual fração do pátio NÃO foi pintada?", options: ["5/8", "3/8", "2/8", "8/8"], answer: 1 },
+            { q: "Um atleta correu 2/5 de uma maratona e parou para beber água. Em seguida, correu mais 1/5. Qual fração da maratona ele já percorreu?", options: ["3/5", "2/10", "3/10", "1/5"], answer: 0 },
+            { q: "A metade de 1/2 é:", options: ["1", "1/4", "1/3", "0"], answer: 1 },
+            { q: "Em uma fazenda, 1/4 dos animais são vacas, 1/4 são cavalos e o restante são 20 porcos. Qual o total de animais na fazenda?", options: ["40", "60", "80", "100"], answer: 0 },
+            { q: "Uma garrafa tem capacidade para 2 litros. Se ela contém apenas 1/4 de litro de água, quanta água falta para encher a garrafa?", options: ["1 litro e 3/4", "1 litro", "1/2 litro", "Falta 1/4"], answer: 0 },
+            { q: "Se eu dividir uma pizza em 6 fatias e comer 4, que fração simplificada representa o que eu comi?", options: ["4/6", "1/2", "2/3", "3/4"], answer: 2 },
+            { q: "Um operário pintou 1/3 de um muro no primeiro dia e 1/2 do MESMO muro no segundo dia. Ele pintou o muro todo?", options: ["Sim, passou do muro.", "Sim, pintou exatamente tudo.", "Não, ainda falta 1/6 do muro.", "Não, falta 1/4 do muro."], answer: 2 }
+        ];
+
+        // Variáveis de Estado
+        let currentQuestion = 0;
+        let score = 0;
+        let mistakes = 0;
+        let timer = 0;
+        let interval;
+        let studentName = "";
+        let isAnswered = false;
+
+        // Elementos DOM
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const nameInput = document.getElementById('student-name');
         
-        let opcoes = [correta];
-        while(opcoes.length < 4) {
-            let numErrado = state.num + Math.floor(Math.random() * 5) + 1;
-            let denErrado = state.den + Math.floor(Math.random() * 5) + 1;
-            if(!saoEquivalentes(state.num, state.den, numErrado, denErrado)) {
-                opcoes.push({ n: numErrado, d: denErrado, eq: false });
+        function abrirModal() { document.getElementById('info-modal').style.display = 'flex'; }
+        function fecharModal() { document.getElementById('info-modal').style.display = 'none'; }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function iniciarJogo() {
+            studentName = nameInput.value.trim();
+            if (!studentName) {
+                alert("Por favor, digite seu nome para o certificado!");
+                return;
+            }
+            startScreen.classList.remove('active');
+            gameScreen.classList.add('active');
+            
+            // Iniciar Cronômetro
+            interval = setInterval(() => {
+                timer++;
+                document.getElementById('timer').innerText = formatTime(timer);
+            }, 1000);
+
+            carregarQuestao();
+        }
+
+        function carregarQuestao() {
+            isAnswered = false;
+            document.getElementById('q-number').innerText = currentQuestion + 1;
+            const qData = bankOfQuestions[currentQuestion];
+            document.getElementById('question-text').innerText = qData.q;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = ''; // limpa anteriores
+
+            qData.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = String.fromCharCode(65 + index) + ") " + opt; // A), B)...
+                btn.onclick = () => verificarResposta(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function verificarResposta(selectedIndex, btnElement) {
+            if (isAnswered) return; // Impede duplo clique
+            
+            const qData = bankOfQuestions[currentQuestion];
+            const botoes = document.querySelectorAll('.option-btn');
+
+            if (selectedIndex === qData.answer) {
+                // Acertou
+                btnElement.classList.add('correct');
+                score += 100; 
+                isAnswered = true;
+                document.getElementById('score').innerText = score;
+                
+                setTimeout(() => {
+                    proximaQuestao();
+                }, 1000);
+            } else {
+                // Errou
+                btnElement.classList.add('wrong');
+                mistakes++;
+                score = Math.max(0, score - 20); // Penalidade não deixa ficar negativo
+                document.getElementById('score').innerText = score;
             }
         }
-        
-        // Embaralhar
-        opcoes.sort(() => Math.random() - 0.5);
-        
-        opcoes.forEach(op => {
-            const btn = document.createElement('button');
-            btn.innerText = `${op.n}/${op.d}`;
-            btn.onclick = () => {
-                if(op.eq) {
-                    state.fracoesUsadas.push(`${op.n}/${op.d}`);
-                    mostrarEtapa(3);
-                } else {
-                    if(!registrarErro()) alert("Fração incorreta. Tente novamente!");
-                }
-            };
-            container.appendChild(btn);
-        });
-    }
 
-    // --- ETAPA 3 ---
-    function verificarEtapa3() {
-        const n = parseInt(document.getElementById('num-3').value);
-        const d = parseInt(document.getElementById('den-3').value);
-        
-        if (isNaN(n) || isNaN(d) || d === 0) {
-            alert("Fração inválida.");
-            return;
-        }
-
-        const fracaoDigitada = `${n}/${d}`;
-
-        if (state.fracoesUsadas.includes(fracaoDigitada)) {
-            if(!registrarErro()) alert("Digite uma fração diferente das anteriores!");
-            state.tentativasEtapa3++;
-        } else if (!saoEquivalentes(state.num, state.den, n, d)) {
-            if(!registrarErro()) alert(`Tente de novo! (${state.tentativasEtapa3 + 1}/3)`);
-            state.tentativasEtapa3++;
-        } else {
-            // Sucesso!
-            state.fracoesUsadas.push(fracaoDigitada);
-            prepararEtapa4();
-            mostrarEtapa(4);
-            return;
-        }
-
-        document.getElementById('tentativas-step3').innerText = state.tentativasEtapa3;
-
-        if (state.tentativasEtapa3 >= 3) {
-            alert("Você esgotou as 3 tentativas. Voltando para a etapa 1.");
-            state.tentativasEtapa3 = 0;
-            document.getElementById('tentativas-step3').innerText = "0";
-            document.getElementById('num-3').value = "";
-            document.getElementById('den-3').value = "";
-            mostrarEtapa(1);
-        }
-    }
-
-    // --- ETAPA 4 ---
-    function prepararEtapa4() {
-        const container = document.getElementById('options-step4');
-        container.innerHTML = '';
-        
-        const valorDecimal = state.num / state.den;
-        
-        let opcoes = [{ texto: `Ponto em ${valorDecimal.toFixed(2)}`, correta: true }];
-        
-        while(opcoes.length < 4) {
-            let erro = Math.random();
-            if(Math.abs(erro - valorDecimal) > 0.1) {
-                opcoes.push({ texto: `Ponto em ${erro.toFixed(2)}`, correta: false });
+        function proximaQuestao() {
+            currentQuestion++;
+            if (currentQuestion < bankOfQuestions.length) {
+                carregarQuestao();
+            } else {
+                finalizarJogo();
             }
         }
-        
-        opcoes.sort(() => Math.random() - 0.5);
-        
-        opcoes.forEach((op, index) => {
-            const btn = document.createElement('button');
-            btn.innerText = `Opção ${['A','B','C','D'][index]}: ${op.texto}`;
-            btn.onclick = () => {
-                if(op.correta) {
-                    prepararEtapa5();
-                    mostrarEtapa(5);
-                } else {
-                    if(!registrarErro()) alert("Posição incorreta. Tente novamente!");
-                }
-            };
-            container.appendChild(btn);
-        });
-    }
 
-    // --- ETAPA 5 ---
-    function prepararEtapa5() {
-        const container = document.getElementById('options-step5');
-        container.innerHTML = '';
-        
-        const respostaCerta = (1000 / state.den) * state.num;
-        let opcoes = [{ val: respostaCerta, correta: true }];
-        
-        while(opcoes.length < 4) {
-            let erro = respostaCerta + (Math.floor(Math.random() * 200) - 100);
-            if(erro !== respostaCerta && erro > 0 && !opcoes.some(o => o.val === erro)) {
-                opcoes.push({ val: Math.round(erro), correta: false });
+        function finalizarJogo() {
+            clearInterval(interval);
+            gameScreen.classList.remove('active');
+            resultScreen.classList.add('active');
+
+            // Calcula bônus de tempo (Se fez em menos de 10 min = 600s)
+            if (timer < 600) {
+                let bonus = Math.floor((600 - timer) / 2);
+                score += bonus;
+            }
+
+            document.getElementById('cert-name').innerText = studentName;
+            document.getElementById('cert-score').innerText = score;
+            document.getElementById('cert-time').innerText = formatTime(timer);
+            document.getElementById('cert-mistakes').innerText = mistakes;
+
+            const mentionText = document.getElementById('cert-mention');
+            const medal = document.getElementById('medal-icon');
+
+            if (mistakes === 0) {
+                mentionText.innerText = "Desempenho Impecável (Ouro)";
+                medal.innerText = "🏆";
+            } else if (mistakes <= 5) {
+                mentionText.innerText = "Excelente (Prata)";
+                medal.innerText = "🥈";
+            } else if (mistakes <= 10) {
+                mentionText.innerText = "Muito Bom (Bronze)";
+                medal.innerText = "🥉";
+            } else {
+                mentionText.innerText = "Bom Esforço (Continue praticando!)";
+                medal.innerText = "🏅";
             }
         }
-        
-        opcoes.sort(() => Math.random() - 0.5);
-        
-        opcoes.forEach((op, index) => {
-            const btn = document.createElement('button');
-            // Formatação para BR
-            btn.innerText = `(${['A','B','C','D'][index]}) ${op.val}`;
-            btn.onclick = () => {
-                if(op.correta) {
-                    prepararEtapa6();
-                    mostrarEtapa(6);
-                } else {
-                    if(!registrarErro()) alert("Cálculo incorreto. Tente novamente!");
-                }
-            };
-            container.appendChild(btn);
-        });
-    }
-
-    // --- ETAPA 6 ---
-    function prepararEtapa6() {
-        const problema = problemasOBMEP[Math.floor(Math.random() * problemasOBMEP.length)];
-        document.getElementById('obmep-problem').innerText = problema.pergunta;
-        state.respostaObmepAtual = problema.resposta;
-    }
-
-    function verificarEtapa6() {
-        const resposta = document.getElementById('obmep-answer').value.trim();
-        if(resposta === state.respostaObmepAtual) {
-            mostrarEtapa('final');
-        } else {
-            if(!registrarErro()) alert("Resposta incorreta. Tente novamente!");
-        }
-    }
-
-</script>
+    </script>
 </body>
 </html>
